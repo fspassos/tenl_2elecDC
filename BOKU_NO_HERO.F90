@@ -2,21 +2,21 @@ PROGRAM BOKU_NO_HERO
 
    IMPLICIT none
 !===============================================================================
-! Constantes para calcular o tempo de execucao e outros 
+! Constantes para calcular o tempo de execucao e outros
 !===============================================================================
    INTEGER :: i, j, l, t, dia_i, dia_f, minuto_i, minuto_f, hora_f, hora_i, enc_X
    INTEGER :: dia_e, minuto_e, hora_e, segundo_e
    INTEGER :: segundo_i, segundo_f
    INTEGER, dimension (8) :: values
 !===============================================================================
-! Cosnstantes necessarias para a cadeia 
+! Cosnstantes necessarias para a cadeia
 !===============================================================================
    INTEGER, PARAMETER :: tempo_final = 1.0D3, X_max = 10
-   INTEGER :: quatidade_de_amostras 
+   INTEGER :: quatidade_de_amostras
    INTEGER, PARAMETER :: N = 3000
    DOUBLE PRECISION :: t_real
 !===============================================================================
-! Costantes da alta expasao 
+! Costantes da alta expasao
 !===============================================================================
    DOUBLE PRECISION, PARAMETER :: N_aut_exp = dble(N)
    DOUBLE PRECISION :: borda_i1i2, BOR
@@ -39,11 +39,11 @@ PROGRAM BOKU_NO_HERO
    CHARACTER (LEN=tempo) :: retorno, ext_espacial, desvio, temi
    CHARACTER (len=6) :: comando
 !===============================================================================
-! Ingredientes do sistema 
+! Ingredientes do sistema
 !===============================================================================
    DOUBLE PRECISION :: NL1, NL2, X, E(0:N+1), auxU, U
    DOUBLE COMPLEX :: f(0:N + 1,0:N + 1)
-   DOUBLE PRECISION, PARAMETER :: V = 1.0D0   
+   DOUBLE PRECISION, PARAMETER :: V = 1.0D0
    INTEGER :: semente, W
    REAL :: ran1
    INTEGER :: k, OLHA(tempo)
@@ -53,7 +53,7 @@ PROGRAM BOKU_NO_HERO
    DOUBLE PRECISION :: Part, Part_sobre_N, espacial, R(N)
    DOUBLE PRECISION :: cent1, cent2, ce1
 !===============================================================================
-! Funcoes Runge-Kutta 
+! Funcoes Runge-Kutta
 !===============================================================================
    DOUBLE COMPLEX :: A, B, C
    DOUBLE COMPLEX, PARAMETER :: ic = (0 ,-1)*dt
@@ -112,13 +112,13 @@ PROGRAM BOKU_NO_HERO
    DOUBLE PRECISION, PARAMETER :: k11f=(49.0D0-7.0D0*s21)/18.0D0
 
    WRITE(comando,'(a)') "mkdir "
-   
+
    PRINT *, "Digite o valor da interacao :"
    READ *, U
 
    CALL date_and_time(VALUES=values)
    dia_i = values(3)
-   hora_i = values(5)      
+   hora_i = values(5)
    minuto_i = values(6)
    segundo_i = values(7)
 !============== Abrindo arquivo pra esquever o tempo que comecou ===============
@@ -127,15 +127,15 @@ PROGRAM BOKU_NO_HERO
    WRITE (12, *) "Coloquei para rodar no dia ", dia_i, "na hora :", &
                                      hora_i, "h", minuto_i, "m", segundo_i, "s."
 !============================== Fechando =======================================
-   
+
    WRITE ( diretorio_EXT, '("EXTW",i1,"U",f4.2,"X0-",i2,"/")' ) W, U, X_max
    comando_EXT = comando // trim(diretorio_EXT)
    CALL system(comando_EXT)
-   
+
    WRITE ( diretorio_RTN, '("RNTW",i1,"U",f4.2,"X0-",i2,"/")' ) W, U, X_max
    comando_RTN = comando // trim(diretorio_RTN)
    CALL system(comando_RTN)
-   
+
 !========================== loop das amostras ==================================
       X = 0.                                                                    ! Valor inicial
 !      DO enc_X = 1, Pnt_f_enc_X                                                 ! Auto variacao de X
@@ -145,22 +145,22 @@ PROGRAM BOKU_NO_HERO
 
 !=============================== Abrindo arquivos ==============================
          WRITE (ext_espacial, '("EXTW",i1,"X",f4.2,"U",f6.2"AMT",i4,"N",i4 &
-                                         ,"DT",f6.3,".dat" )') W, X, U, k, N, dt 
-   
+                                         ,"DT",f6.3,".dat" )') W, X, U, k, N, dt
+
          WRITE (retorno, '("RTNW",i1,"X",f4.2,"U",f6.2,"AMT",i4,"N",i4 &
                                          ,"DT",f6.3,".dat" )') W, X, U, k, N, dt
-!=========================== Fim de Abrir aquivos ==============================      
+!=========================== Fim de Abrir aquivos ==============================
 
 !============================= Pacote tipo delta ===============================
          f = (0.,0.)
          f(N/2,N/2) = (1., 0.)
 !============================== loop do tempo ==================================
-         DO t = 1, tempo 
+         DO t = 1, tempo
 !=============================== Runge-Kutta ===================================
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0            
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
 !============================= Nao-linearidade =================================
@@ -173,11 +173,11 @@ PROGRAM BOKU_NO_HERO
                                f(i, j - 1) + f(i, j + 1)))
                END DO
             END DO
-            
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0            
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -197,7 +197,7 @@ PROGRAM BOKU_NO_HERO
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0            
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -212,12 +212,12 @@ PROGRAM BOKU_NO_HERO
                   k3(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO                   
-            
+            END DO
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -235,11 +235,11 @@ PROGRAM BOKU_NO_HERO
                                  V*(B + C))
                END DO
             END DO
-            
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -261,7 +261,7 @@ PROGRAM BOKU_NO_HERO
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -284,7 +284,7 @@ PROGRAM BOKU_NO_HERO
                                  V*(B + C))
                END DO
             END DO
-            
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
@@ -310,12 +310,12 @@ PROGRAM BOKU_NO_HERO
                   k7(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO     
+            END DO
 
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -337,12 +337,12 @@ PROGRAM BOKU_NO_HERO
                   k8(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO  
-            
+            END DO
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -364,12 +364,12 @@ PROGRAM BOKU_NO_HERO
                   k9(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO 
-            
+            END DO
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -393,12 +393,12 @@ PROGRAM BOKU_NO_HERO
                   k10(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO 
-            
+            END DO
+
             DO i = i1, i2
                DO j = j1, j2
                   auxU = 0D0
-                  NL1 = 0D0         
+                  NL1 = 0D0
                   NL2 = 0D0
                   IF( i==j ) auxU = 1d0
                   DO  l = i1, i2
@@ -422,8 +422,8 @@ PROGRAM BOKU_NO_HERO
                   k11(i,j) = ic*((X*(NL1 + NL2) + auxU*U)*A + &
                                  V*(B + C))
                END DO
-            END DO   
-            
+            END DO
+
             DO i = i1, i2
                DO j = j1, j2
                   f(i,j) = f(i,j) + (9.0D0*(k1(i,j) + k11(i,j)) + 49.0D0*(k8(i,j) &
@@ -471,7 +471,7 @@ PROGRAM BOKU_NO_HERO
                END DO
             END DO
 !============================= Fim da Extensao =================================
-  
+
 !============================ Probabilidae de retorno ==========================
             nome_RTN = trim(diretorio_RTN) // trim(retorno)
             OPEN (UNIT = 9, file = nome_RTN)
@@ -486,11 +486,11 @@ PROGRAM BOKU_NO_HERO
 !==================== Escrevendo hora que termina uma a mostra =================
          CALL date_and_time(VALUES=values)
          dia_e = values(3)
-         hora_e = values(5)      
+         hora_e = values(5)
          minuto_e = values(6)
-         segundo_e = values(7)      
+         segundo_e = values(7)
          WRITE (12, *) "Encremento", X,"terminal no ", dia_e, "na hora:", &
-                                     hora_e, "h", minuto_e, "m", segundo_e, "s." 
+                                     hora_e, "h", minuto_e, "m", segundo_e, "s."
 !======================== Fim de escrever hora que termina =====================
 !         X = X + dX
 !      END DO
@@ -527,4 +527,3 @@ FUNCTION ran1(idum)
       ran1=min(AM*iy,RNMX)
       return
       END
-          
